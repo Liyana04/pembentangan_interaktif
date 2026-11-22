@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ms" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Concept Blueprint v1.0 — FemTech Pioneers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    colors: {
+                        teal: {
+                            50: '#F0FDFA',
+                            100: '#CCFBF1',
+                            200: '#99F6E4',
+                            500: '#14B8A6',
+                            600: '#0D9488',
+                            700: '#0F766E',
+                            800: '#115E59',
+                            900: '#134E4A',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            -webkit-font-smoothing: antialiased;
+        }
+        .editorial-grid {
+            background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .tab-active {
+            background-color: #0F766E;
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);
+        }
+        .fade-in {
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #94A3B8; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #0F766E; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-teal-100 selection:text-teal-900">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-teal-700 text-white font-bold text-sm tracking-wider">FP</span>
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-widest text-teal-700 block">Blueprint v1.0</span>
+                    <span class="text-sm font-bold text-slate-900 leading-none">FemTech Pioneers</span>
+                </div>
+            </div>
+
+            <!-- View Mode Toggle (Presentation Deck vs Full Editorial Scroll) -->
+            <div class="flex items-center space-x-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                <button id="btn-deck-mode" onclick="setMode('deck')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all tab-active">
+                    Mod Pembentangan
+                </button>
+                <button id="btn-scroll-mode" onclick="setMode('scroll')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all">
+                    Paparan Penuh
+                </button>
+            </div>
+        </div>
+
+        <!-- Section Navigation Pills -->
+        <nav id="section-nav" class="bg-slate-50/90 border-b border-slate-200/60 overflow-x-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex space-x-2 min-w-max">
+                <button onclick="goToSlide(0)" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-teal-700 text-white" data-index="0">00. Pengenalan</button>
+                <button onclick="goToSlide(1)" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-200/60" data-index="1">01. Rasional & Data</button>
+                <button onclick="goToSlide(2)" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-200/60" data-index="2">02. Objektif SMART</button>
+                <button onclick="goToSlide(3)" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-200/60" data-index="3">03. Pelan 100 Hari</button>
+                <button onclick="goToSlide(4)" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-200/60" data-index="4">04. Peranan Ahli Kelab</button>
+                <button onclick="goToSlide(5)" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-200/60" data-index="5">05. Pembelajaran & AI</button>
+                <button onclick="goToSlide(6)" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-200/60" data-index="6">06. KPI & Impak</button>
+                <button onclick="goToSlide(7)" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-200/60" data-index="7">07. Risiko & Mitigasi</button>
+                <button onclick="goToSlide(8)" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-200/60" data-index="8">08. Anggaran Bajet</button>
+                <button onclick="goToSlide(9)" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-200/60" data-index="9">09. Kelestarian</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Container -->
+    <main id="main-container" class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+
+        <!-- SLIDE 0: HERO / COVER -->
+        <section class="slide-section fade-in" data-slide="0">
+            <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+                <div class="editorial-grid p-8 sm:p-14 lg:p-16 border-b border-slate-100">
+                    <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-xs font-bold uppercase tracking-wider mb-6">
+                        <span class="w-2 h-2 rounded-full bg-teal-600 animate-pulse"></span>
+                        <span>Final Concept Blueprint v1.0</span>
+                    </div>
+                    <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-[1.15] mb-6">
+                        FemTech Pioneers:<br>
+                        <span class="text-teal-700">Junior Coding & STEM</span><br>
+                        Mobile Lab for PPR
+                    </h1>
+                    <p class="text-lg sm:text-xl text-slate-600 max-w-3xl leading-relaxed font-normal">
+                        Inisiatif Tanggungjawab Sosial Korporat (CSR) berimpak tinggi bagi merapatkan jurang digital gender di peringkat akar umbi melalui pendedahan pengekodan visual dan literasi AI asas.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 bg-slate-50/70">
+                    <div class="p-6 sm:p-8">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-700 block mb-1.5">Cadangan Inisiatif Oleh</span>
+                        <p class="text-base sm:text-lg font-bold text-slate-900">Kelab Wanita Sektor Awam Malaysia</p>
+                    </div>
+                    <div class="p-6 sm:p-8">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-700 block mb-1.5">Kumpulan Sasaran</span>
+                        <p class="text-base sm:text-lg font-bold text-slate-900">Kanak-kanak perempuan 9 – 15 tahun (Komuniti PPR)</p>
+                    </div>
+                    <div class="p-6 sm:p-8">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-700 block mb-1.5">Tempoh Pelaksanaan</span>
+                        <p class="text-base sm:text-lg font-bold text-slate-900">100 Hari (Projek Rintis Berfasa)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 1: RINGKASAN EKSEKUTIF & RASIONAL -->
+        <section class="slide-section hidden fade-in" data-slide="1">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-teal-700">Bahagian 01</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Ringkasan Eksekutif & Rasional Projek</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-7 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-teal-100 text-teal-800 inline-flex items-center justify-center mr-3 font-bold text-sm">01</span>
+                            Mandat & Fokus Utama
+                        </h3>
+                        <p class="text-slate-600 leading-relaxed mb-4">
+                            Projek <strong>FemTech Pioneers</strong> merupakan inisiatif CSR strategik oleh Kelab Wanita Sektor Awam untuk merapatkan jurang digital gender di peringkat akar umbi.
+                        </p>
+                        <p class="text-slate-600 leading-relaxed">
+                            Memfokuskan kepada anak perempuan di kawasan Program Perumahan Rakyat (PPR), program ini membekalkan pendedahan awal kepada pengekodan (<em>coding</em>), pemikiran komputasional, dan literasi kecerdasan buatan (AI) asas bagi mempersiapkan generasi muda menghadapi ekosistem ekonomi digital negara.
+                        </p>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-slate-100">
+                        <div class="bg-teal-50/80 border border-teal-200/80 rounded-xl p-4">
+                            <p class="text-sm font-semibold text-teal-900">
+                                "Jurang Kemahiran Digital Lanjutan: Kekangan akses kepada peranti pengkomputeran di rumah serta kekurangan <em>role model</em> wanita dalam bidang teknologi mengehadkan aspirasi kerjaya anak-anak perempuan di kawasan perumahan kos rendah sejak usia awal."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-teal-800 text-white p-8 rounded-2xl shadow-sm">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-200 block mb-2">Konteks Malaysia (2024–2026)</span>
+                        <h3 class="text-xl font-bold mb-6">Paradoks Tenaga Kerja Teknologi</h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <div class="flex justify-between items-end mb-2">
+                                    <span class="text-sm text-teal-100">Graduan Wanita Bidang STEM (IPT)</span>
+                                    <span class="text-3xl font-extrabold text-white">&gt;50%</span>
+                                </div>
+                                <div class="w-full bg-teal-950/60 rounded-full h-3">
+                                    <div class="bg-teal-300 h-3 rounded-full" style="width: 54%"></div>
+                                </div>
+                                <span class="text-[11px] text-teal-200 mt-1 block">Sumber: Laporan DOSM & Khazanah Research Institute</span>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between items-end mb-2">
+                                    <span class="text-sm text-teal-100">Tenaga Kerja Wanita Sektor Teknologi</span>
+                                    <span class="text-3xl font-extrabold text-amber-300">~35%</span>
+                                </div>
+                                <div class="w-full bg-teal-950/60 rounded-full h-3">
+                                    <div class="bg-amber-400 h-3 rounded-full" style="width: 35%"></div>
+                                </div>
+                                <span class="text-[11px] text-teal-200 mt-1 block">Jurang penyertaan ketara selepas tamat pengajian</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: OBJEKTIF SMART -->
+        <section class="slide-section hidden fade-in" data-slide="2">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-teal-700">Bahagian 02</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Objektif SMART</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- S -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-teal-500 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-teal-700 text-white font-serif text-2xl font-bold flex items-center justify-center mb-4">S</div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Specific (Khusus)</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Melaksanakan latihan mudah alih STEM, pengekodan visual, dan literasi AI asas kepada sekurang-kurangnya <strong>100 orang anak perempuan</strong> di komuniti PPR terpilih.
+                    </p>
+                </div>
+
+                <!-- M -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-teal-500 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-teal-700 text-white font-serif text-2xl font-bold flex items-center justify-center mb-4">M</div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Measurable (Boleh Diukur)</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Mencapai peningkatan sekurang-kurangnya <strong>70%</strong> dalam skor penilaian literasi digital (<em>pre & post-assessment</em>) dan memastikan <strong>80%</strong> peserta berjaya membina projek mini digital pertama mereka.
+                    </p>
+                </div>
+
+                <!-- A -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-teal-500 transition-colors">
+                    <div class="w-12 h-12 rounded-xl bg-teal-700 text-white font-serif text-2xl font-bold flex items-center justify-center mb-4">A</div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Achievable (Boleh Dicapai)</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Menggembleng kepakaran sukarelawan daripada ahli Kelab Wanita sektor awam dengan sokongan kit perkakasan mudah alih (<em>Mobile Tech Kit</em>).
+                    </p>
+                </div>
+
+                <!-- R -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-teal-500 transition-colors md:col-span-1 lg:col-span-1">
+                    <div class="w-12 h-12 rounded-xl bg-teal-700 text-white font-serif text-2xl font-bold flex items-center justify-center mb-4">R</div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Relevant (Relevan)</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Menyokong secara langsung <strong>Pelan Tindakan Ekonomi Digital Malaysia (MyDIGITAL)</strong> dan <strong>Dasar Wanita Negara</strong> dalam memperkasakan keterangkuman digital wanita.
+                    </p>
+                </div>
+
+                <!-- T -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:border-teal-500 transition-colors md:col-span-1 lg:col-span-2 bg-gradient-to-br from-white to-teal-50/50">
+                    <div class="w-12 h-12 rounded-xl bg-teal-800 text-white font-serif text-2xl font-bold flex items-center justify-center mb-4">T</div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Time-bound (Tempoh Masa)</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Diselesaikan sepenuhnya melalui struktur pelaksanaan berfasa yang terancang dan boleh dipantau selama <strong>100 hari</strong> daripada tarikh kelulusan kertas kerja hingga hari pembentangan projek akhir.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: STRUKTUR PELAKSANAAN 100 HARI -->
+        <section class="slide-section hidden fade-in" data-slide="3">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-teal-700">Bahagian 03</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Struktur Pelaksanaan 100 Hari</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Fasa 1 -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1.5 bg-teal-500"></div>
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-md bg-teal-50 text-teal-800 text-xs font-bold mb-3">Hari 1 – Hari 30</span>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3">Fasa 1: Perancangan & Penjajaran</h3>
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Aktiviti Utama</p>
+                        <ul class="text-sm text-slate-600 space-y-1.5 mb-5 list-disc pl-4">
+                            <li>Pembentukan Jawatankuasa Induk</li>
+                            <li>Pemilihan PPR sasaran</li>
+                            <li>Libat urus persatuan penduduk</li>
+                            <li>Penyediaan modul latihan</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-teal-700 block mb-1">Hasil Utama (Deliverables)</span>
+                        <p class="text-xs font-medium text-slate-800">Kertas kerja diluluskan; lokasi PPR muktamad; draf silibus mikro-kod siap.</p>
+                    </div>
+                </div>
+
+                <!-- Fasa 2 -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1.5 bg-teal-600"></div>
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-md bg-teal-50 text-teal-800 text-xs font-bold mb-3">Hari 31 – Hari 60</span>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3">Fasa 2: Mobilisasi & Latihan Fasilitator</h3>
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Aktiviti Utama</p>
+                        <ul class="text-sm text-slate-600 space-y-1.5 mb-5 list-disc pl-4">
+                            <li>Pendaftaran 100 peserta</li>
+                            <li>Sesi <em>Train-the-Trainer</em> ahli kelab</li>
+                            <li>Penyediaan logistik & set peranti mudah alih</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-teal-700 block mb-1">Hasil Utama (Deliverables)</span>
+                        <p class="text-xs font-medium text-slate-800">Senarai rasmi peserta; 15–20 fasilitator kelab terlatih; kit perkakasan sedia.</p>
+                    </div>
+                </div>
+
+                <!-- Fasa 3 -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1.5 bg-teal-700"></div>
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-md bg-teal-50 text-teal-800 text-xs font-bold mb-3">Hari 61 – Hari 90</span>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3">Fasa 3: Pelaksanaan Lapangan & Mentorship</h3>
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Aktiviti Utama</p>
+                        <ul class="text-sm text-slate-600 space-y-1.5 mb-5 list-disc pl-4">
+                            <li>Pelancaran rasmi di balai raya PPR</li>
+                            <li>4 siri <em>Mobile Lab</em> (hujung minggu)</li>
+                            <li>Pelancaran <em>Digital Big Sisterhood</em></li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-teal-700 block mb-1">Hasil Utama (Deliverables)</span>
+                        <p class="text-xs font-medium text-slate-800">4 sesi bengkel fizikal selesai; sesi bimbingan maya berkala bermula.</p>
+                    </div>
+                </div>
+
+                <!-- Fasa 4 -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 left-0 right-0 h-1.5 bg-teal-900"></div>
+                    <div>
+                        <span class="inline-block px-2.5 py-1 rounded-md bg-teal-50 text-teal-800 text-xs font-bold mb-3">Hari 91 – Hari 100</span>
+                        <h3 class="text-lg font-bold text-slate-900 mb-3">Fasa 4: Kemuncak, Penilaian & Penutupan</h3>
+                        <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Aktiviti Utama</p>
+                        <ul class="text-sm text-slate-600 space-y-1.5 mb-5 list-disc pl-4">
+                            <li>Penganjuran <em>"Demo Day"</em> di kementerian/agensi</li>
+                            <li>Pembentangan projek peserta</li>
+                            <li>Penilaian impak akhir & penyampaian sijil</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-teal-700 block mb-1">Hasil Utama (Deliverables)</span>
+                        <p class="text-xs font-medium text-slate-800">Laporan impak pasca-projek; dokumentasi rasmi; tamat kohort rintis.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: STRUKTUR PERANAN AHLI KELAB -->
+        <section class="slide-section hidden fade-in" data-slide="4">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-teal-700">Bahagian 04</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Struktur Peranan Ahli Kelab Sektor Awam</h2>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Role 1 -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div class="lg:col-span-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-700 block mb-1">Tunjang 01</span>
+                        <h3 class="text-xl font-bold text-slate-900">Jawatankuasa Pengurusan & Penaja</h3>
+                    </div>
+                    <div class="lg:col-span-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Tanggungjawab Utama</span>
+                        <p class="text-sm text-slate-600 leading-relaxed">Mengurus kelulusan pentadbiran, bajet, logistik, dan jalinan kerjasama strategik bersama agensi atau rakan korporat.</p>
+                    </div>
+                    <div class="lg:col-span-4 bg-teal-50/80 p-4 rounded-xl border border-teal-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-800 block mb-1">Nilai Tambah kepada Ahli Kelab</span>
+                        <p class="text-sm font-medium text-teal-950">Mengasah kemahiran pengurusan projek berskala komuniti dan tadbir urus ESG.</p>
+                    </div>
+                </div>
+
+                <!-- Role 2 -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div class="lg:col-span-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-700 block mb-1">Tunjang 02</span>
+                        <h3 class="text-xl font-bold text-slate-900">Fasilitator & Pengajar Teknikal</h3>
+                    </div>
+                    <div class="lg:col-span-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Tanggungjawab Utama</span>
+                        <p class="text-sm text-slate-600 leading-relaxed">Mengendalikan modul pembelajaran interaktif di lapangan menggunakan pendekatan visual dan mesra kanak-kanak.</p>
+                    </div>
+                    <div class="lg:col-span-4 bg-teal-50/80 p-4 rounded-xl border border-teal-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-800 block mb-1">Nilai Tambah kepada Ahli Kelab</span>
+                        <p class="text-sm font-medium text-teal-950">Meningkatkan kemahiran komunikasi strategik dan penyampaian teknikal secara ringkas.</p>
+                    </div>
+                </div>
+
+                <!-- Role 3 -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div class="lg:col-span-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-teal-700 block mb-1">Tunjang 03</span>
+                        <h3 class="text-xl font-bold text-slate-900">Mentor Digital (<em>Digital Big Sisterhood</em>)</h3>
+                    </div>
+                    <div class="lg:col-span-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">Tanggungjawab Utama</span>
+                        <p class="text-sm text-slate-600 leading-relaxed">Menjadi kakak angkat digital kepada kumpulan kecil peserta bagi memberi bimbingan dan motivasi berterusan selepas bengkel.</p>
+                    </div>
+                    <div class="lg:col-span-4 bg-teal-50/80 p-4 rounded-xl border border-teal-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-teal-800 block mb-1">Nilai Tambah kepada Ahli Kelab</span>
+                        <p class="text-sm font-medium text-teal-950">Membina jaringan kepimpinan empati dan pemerkasaan wanita merentas generasi.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: PENDEKATAN PEMBELAJARAN & INTEGRASI AI -->
+        <section class="slide-section hidden fade-in" data-slide="5">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-teal-700">Bahagian 05</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Pendekatan Pembelajaran & Integrasi AI</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+                    </div>
+                    <span class="text-xs font-bold text-teal-700 uppercase tracking-wider">Pilar 01</span>
+                    <h3 class="text-xl font-bold text-slate-900 mt-1 mb-3">Pembelajaran Berasaskan Permainan (<em>Gamified Micro-Coding</em>)</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Menggunakan persekitaran blok kod visual interaktif (seperti Scratch atau platform blok berasaskan web) supaya peserta dapat membina permainan mini atau animasi ringkas dalam tempoh <strong>3 jam</strong> tanpa halangan sintaks teknikal yang rumit.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                    </div>
+                    <span class="text-xs font-bold text-teal-700 uppercase tracking-wider">Pilar 02</span>
+                    <h3 class="text-xl font-bold text-slate-900 mt-1 mb-3">Integrasi AI Generatif Asas</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Memperkenalkan penggunaan alatan AI generatif yang selamat dan beretika untuk kanak-kanak, seperti penjanaan idea penceritaan interaktif (<em>storytelling</em>) dan reka bentuk grafik asas bagi projek mini mereka.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <span class="text-xs font-bold text-teal-700 uppercase tracking-wider">Pilar 03</span>
+                    <h3 class="text-xl font-bold text-slate-900 mt-1 mb-3">Modul Keselamatan Siber (<em>Cyber Hygiene</em>)</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Mendedahkan asas keselamatan dalam talian, perlindungan maklumat peribadi, dan pencegahan penipuan siber kepada peserta serta ibu bapa yang hadir.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: KPI & PENGUKURAN IMPAK -->
+        <section class="slide-section hidden fade-in" data-slide="6">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-teal-700">Bahagian 06</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Petunjuk Prestasi Utama (KPI) & Pengukuran Impak</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+                <div class="bg-teal-800 text-white p-6 rounded-2xl">
+                    <span class="text-3xl font-extrabold block mb-1">100 + 20</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-teal-200 block mb-3">Penyertaan Aktif</span>
+                    <p class="text-xs text-teal-100 leading-relaxed">100 peserta cilik PPR dan 15–20 sukarelawan ahli kelab terlibat secara aktif.</p>
+                </div>
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl">
+                    <span class="text-3xl font-extrabold text-teal-700 block mb-1">&ge; 80%</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-3">Pencapaian Teknikal</span>
+                    <p class="text-xs text-slate-600 leading-relaxed">Peserta berjaya menghasilkan 1 projek permainan mini atau animasi digital.</p>
+                </div>
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl">
+                    <span class="text-3xl font-extrabold text-teal-700 block mb-1">&ge; 70%</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-3">Peningkatan Literasi</span>
+                    <p class="text-xs text-slate-600 leading-relaxed">Peningkatan skor kefahaman konsep pengekodan dan keselamatan siber.</p>
+                </div>
+                <div class="bg-white border border-slate-200 p-6 rounded-2xl">
+                    <span class="text-3xl font-extrabold text-teal-700 block mb-1">&gt; 85%</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-3">Impak Kualitatif</span>
+                    <p class="text-xs text-slate-600 leading-relaxed">Tahap kepuasan, peningkatan keyakinan diri peserta serta sokongan komuniti PPR.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
+                                <th class="py-4 px-6">Kategori</th>
+                                <th class="py-4 px-6">Petunjuk Prestasi Utama (KPI)</th>
+                                <th class="py-4 px-6">Kaedah Pengukuran</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm">
+                            <tr>
+                                <td class="py-4 px-6 font-bold text-slate-900">Penyertaan & Penglibatan</td>
+                                <td class="py-4 px-6 text-slate-700">100 peserta cilik PPR dan 15–20 sukarelawan ahli kelab terlibat secara aktif.</td>
+                                <td class="py-4 px-6 text-slate-600">Rekod pendaftaran dan kehadiran bagi setiap siri bengkel.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 font-bold text-slate-900">Pencapaian Teknikal</td>
+                                <td class="py-4 px-6 text-slate-700">Sekurang-kurangnya 80% peserta berjaya menghasilkan 1 projek permainan mini atau animasi digital.</td>
+                                <td class="py-4 px-6 text-slate-600">Penilaian hasil projek semasa sesi <em>"Demo Day"</em>.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 font-bold text-slate-900">Peningkatan Literasi</td>
+                                <td class="py-4 px-6 text-slate-700">Peningkatan minimum 70% dalam skor kefahaman konsep pengekodan dan keselamatan siber.</td>
+                                <td class="py-4 px-6 text-slate-600">Ujian penilaian pra-program (<em>Pre-Test</em>) dan pasca-program (<em>Post-Test</em>).</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 font-bold text-slate-900">Impak Kualitatif</td>
+                                <td class="py-4 px-6 text-slate-700">Tahap kepuasan dan peningkatan keyakinan diri peserta serta sokongan komuniti PPR melebihi 85%.</td>
+                                <td class="py-4 px-6 text-slate-600">Soal selidik maklum balas peserta, ibu bapa, dan temubual ringkas.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: ANALISIS RISIKO & PELAN MITIGASI -->
+        <section class="slide-section hidden fade-in" data-slide="7">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-teal-700">Bahagian 07</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Analisis Risiko & Pelan Mitigasi</h2>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Risk 1 -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <h3 class="text-lg font-bold text-slate-900">1. Kehadiran peserta tidak konsisten disebabkan komitmen keluarga atau aktiviti sekolah</h3>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">Tahap Risiko: Sederhana</span>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <strong class="text-teal-800">Pelan Mitigasi:</strong> Menyelaras jadual pada hujung minggu terpilih, melibatkan persatuan penduduk PPR sebagai pemantau, dan menyediakan insentif penyertaan (sijil rasmi & kelengkapan alat tulis).
+                    </p>
+                </div>
+
+                <!-- Risk 2 -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <h3 class="text-lg font-bold text-slate-900">2. Kekangan perkakasan digital (ketiadaan komputer riba atau capaian internet di lokasi PPR)</h3>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 border border-rose-200">Tahap Risiko: Tinggi</span>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <strong class="text-teal-800">Pelan Mitigasi:</strong> Menyediakan <em>Mobile Tech Kit</em> (tablet/komputer riba mini yang dicaj penuh) serta modem mudah alih kelab, atau memohon pinjaman peranti sementara daripada rakan strategik GLC.
+                    </p>
+                </div>
+
+                <!-- Risk 3 -->
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <h3 class="text-lg font-bold text-slate-900">3. Kekangan masa ahli kelab akibat bebanan tugas hakiki di pejabat</h3>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200">Tahap Risiko: Sederhana</span>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <strong class="text-teal-800">Pelan Mitigasi:</strong> Melaksanakan sistem penggiliran sukarelawan (<em>rotational duty roster</em>) agar tugasan dibahagikan secara seimbang antara ahli kelab.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: ANGGARAN BAJET -->
+        <section class="slide-section hidden fade-in" data-slide="8">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-teal-700">Bahagian 08</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Anggaran Bajet (Konsep Rintis / <em>Lean Budgeting</em>)</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
+                                    <th class="py-4 px-5">Bil.</th>
+                                    <th class="py-4 px-5">Komponen Perbelanjaan</th>
+                                    <th class="py-4 px-5">Perincian Kos</th>
+                                    <th class="py-4 px-5 text-right">Anggaran (RM)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-sm">
+                                <tr>
+                                    <td class="py-4 px-5 font-semibold text-slate-500">1</td>
+                                    <td class="py-4 px-5 font-bold text-slate-900">Perkakasan & Kit Pembelajaran Bergerak</td>
+                                    <td class="py-4 px-5 text-slate-600">Sewaan/penyediaan set peranti mudah alih (<em>tablet/laptop kit</em>) dan sambungan internet mudah alih.</td>
+                                    <td class="py-4 px-5 text-right font-bold text-slate-900">3,500.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4 px-5 font-semibold text-slate-500">2</td>
+                                    <td class="py-4 px-5 font-bold text-slate-900">Modul, Bahan Cetakan & Sijil</td>
+                                    <td class="py-4 px-5 text-slate-600">Cetakan buku panduan mikro-kod, tag nama, bunting program, dan sijil rasmi peserta.</td>
+                                    <td class="py-4 px-5 text-right font-bold text-slate-900">1,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4 px-5 font-semibold text-slate-500">3</td>
+                                    <td class="py-4 px-5 font-bold text-slate-900">Logistik Lapangan & Sajian Peserta</td>
+                                    <td class="py-4 px-5 text-slate-600">Makan/minum peserta dan sukarelawan bagi 4 siri bengkel hujung minggu di PPR.</td>
+                                    <td class="py-4 px-5 text-right font-bold text-slate-900">2,500.00</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4 px-5 font-semibold text-slate-500">4</td>
+                                    <td class="py-4 px-5 font-bold text-slate-900">Majlis Kemuncak (<em>Demo Day</em>) & Cenderahati</td>
+                                    <td class="py-4 px-5 text-slate-600">Pengangkutan peserta ke kementerian/agensi, cenderahati peserta, dan hadiah projek terbaik.</td>
+                                    <td class="py-4 px-5 text-right font-bold text-slate-900">2,000.00</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-teal-800 text-white">
+                                    <td colspan="3" class="py-4 px-5 font-bold uppercase tracking-wider text-xs">Jumlah Keseluruhan</td>
+                                    <td class="py-4 px-5 text-right text-lg font-extrabold">RM 9,000.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Visual Breakdown Card -->
+                <div class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 mb-4">Agihan Peratusan Bajet</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold mb-1">
+                                    <span class="text-slate-700">Perkakasan & Kit Bergerak</span>
+                                    <span class="text-teal-700">38.9%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="bg-teal-700 h-2.5 rounded-full" style="width: 38.9%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold mb-1">
+                                    <span class="text-slate-700">Logistik & Sajian (4 Siri)</span>
+                                    <span class="text-teal-700">27.8%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="bg-teal-600 h-2.5 rounded-full" style="width: 27.8%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold mb-1">
+                                    <span class="text-slate-700">Demo Day & Cenderahati</span>
+                                    <span class="text-teal-700">22.2%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="bg-teal-500 h-2.5 rounded-full" style="width: 22.2%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-semibold mb-1">
+                                    <span class="text-slate-700">Modul, Cetakan & Sijil</span>
+                                    <span class="text-teal-700">11.1%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2.5"><div class="bg-teal-300 h-2.5 rounded-full" style="width: 11.1%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 bg-teal-50 p-4 rounded-xl border border-teal-200/80">
+                        <span class="text-xs font-bold text-teal-900 block mb-1">Sumber Pembiayaan Fleksibel</span>
+                        <p class="text-xs text-teal-800 leading-relaxed">
+                            Boleh dibiayai melalui dana kelab, kutipan dalaman, atau penajaan CSR rakan strategik.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: STRATEGI KELESTARIAN -->
+        <section class="slide-section hidden fade-in" data-slide="9">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-teal-700">Bahagian 09</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-slate-900 mt-1">Strategi Kelestarian (<em>Sustainability Plan</em>)</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm relative">
+                    <span class="font-serif text-5xl font-bold text-teal-100 absolute top-6 right-6">01</span>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3 relative z-10">Kesinambungan <em>Digital Big Sisterhood</em></h3>
+                    <p class="text-sm text-slate-600 leading-relaxed relative z-10">
+                        Mengekalkan saluran komunikasi maya berkala (bulanan) antara mentor kelab dan peserta bagi memantau perkembangan akademik serta minat teknologi mereka secara berterusan.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm relative">
+                    <span class="font-serif text-5xl font-bold text-teal-100 absolute top-6 right-6">02</span>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3 relative z-10">Program <em>Train-the-Ambassador</em></h3>
+                    <p class="text-sm text-slate-600 leading-relaxed relative z-10">
+                        Melantik <strong>10 peserta terbaik</strong> daripada kohort rintis sebagai <em>"Rakan Pembimbing Junior"</em> untuk membantu fasilitator kelab dalam penganjuran siri seterusnya.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm relative">
+                    <span class="font-serif text-5xl font-bold text-teal-100 absolute top-6 right-6">03</span>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3 relative z-10">Replikasi Modul Terbuka (<em>Open-Source Blueprint</em>)</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed relative z-10">
+                        Mendokumentasikan keseluruhan modul latihan dan panduan pelaksanaan ini sebagai templat standard yang boleh diguna pakai oleh Kelab Wanita di kementerian serta agensi kerajaan lain di seluruh negara.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Deck Navigation Controls (Shown only in Deck Mode) -->
+        <div id="deck-controls" class="mt-8 pt-6 border-t border-slate-200 flex items-center justify-between">
+            <button id="prev-btn" onclick="prevSlide()" class="inline-flex items-center px-4 py-2.5 rounded-xl border border-slate-300 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                Sebelumnya
+            </button>
+
+            <div class="text-xs font-bold text-slate-500 tracking-wider uppercase">
+                Slaid <span id="slide-counter" class="text-teal-700">1</span> / 10
+            </div>
+
+            <button id="next-btn" onclick="nextSlide()" class="inline-flex items-center px-5 py-2.5 rounded-xl bg-teal-700 text-sm font-semibold text-white hover:bg-teal-800 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm transition-all">
+                Seterusnya
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Mandatory Footer -->
+    <footer class="bg-white border-t border-slate-200 py-5 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+            <span class="font-medium text-slate-600">Final Concept Blueprint v1.0 &bull; FemTech Pioneers</span>
+            <span class="font-semibold text-teal-800">Inspirasi oleh CoachSalwan, The Learning Designer</span>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        let currentMode = 'deck'; // 'deck' or 'scroll'
+        const slides = document.querySelectorAll('.slide-section');
+        const navPills = document.querySelectorAll('.nav-pill');
+        const totalSlides = slides.length;
+
+        function updateDeckUI() {
+            if (currentMode === 'scroll') {
+                slides.forEach(s => {
+                    s.classList.remove('hidden');
+                    s.classList.add('mb-16');
+                });
+                document.getElementById('deck-controls').classList.add('hidden');
+                document.getElementById('section-nav').classList.add('hidden');
+                return;
+            }
+
+            // Deck mode
+            document.getElementById('deck-controls').classList.remove('hidden');
+            document.getElementById('section-nav').classList.remove('hidden');
+
+            slides.forEach((slide, idx) => {
+                slide.classList.remove('mb-16');
+                if (idx === currentSlide) {
+                    slide.classList.remove('hidden');
+                } else {
+                    slide.classList.add('hidden');
+                }
+            });
+
+            navPills.forEach((pill, idx) => {
+                if (idx === currentSlide) {
+                    pill.classList.remove('text-slate-600', 'hover:bg-slate-200/60');
+                    pill.classList.add('bg-teal-700', 'text-white');
+                    pill.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } else {
+                    pill.classList.add('text-slate-600', 'hover:bg-slate-200/60');
+                    pill.classList.remove('bg-teal-700', 'text-white');
+                }
+            });
+
+            document.getElementById('slide-counter').textContent = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides) {
+                currentSlide = index;
+                updateDeckUI();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            const btnDeck = document.getElementById('btn-deck-mode');
+            const btnScroll = document.getElementById('btn-scroll-mode');
+
+            if (mode === 'deck') {
+                btnDeck.classList.add('tab-active');
+                btnDeck.classList.remove('text-slate-600');
+                btnScroll.classList.remove('tab-active');
+                btnScroll.classList.add('text-slate-600');
+            } else {
+                btnScroll.classList.add('tab-active');
+                btnScroll.classList.remove('text-slate-600');
+                btnDeck.classList.remove('tab-active');
+                btnDeck.classList.add('text-slate-600');
+            }
+            updateDeckUI();
+        }
+
+        // Keyboard Arrow Support for Presentation
+        document.addEventListener('keydown', (e) => {
+            if (currentMode !== 'deck') return;
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Initialize
+        updateDeckUI();
+    </script>
+</body>
+</html>
